@@ -1,0 +1,26 @@
+  spring:
+    data:
+      mongodb:
+        authentication-database: admin
+        username: schoolar
+        password: schoolar123
+        database: schoolardb
+        port: 27017
+        host: localhost
+
+  application:
+    security:
+      jwt:
+        secret-key: 214125432A462D4A614E645267556B58703273357638792F423F4528472B4B62
+        expiration: 1800000
+        refresh-token:
+          expiration: 86400000
+
+
+
+
+
+
+
+
+

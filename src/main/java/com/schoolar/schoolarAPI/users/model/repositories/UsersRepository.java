@@ -65,6 +65,15 @@ public class UsersRepository implements IUsersRepository {
     }
 
     @Override
+    public List<User> findUsersBySchoolGrade(String schoolGrade) {
+        Query query = new Query(
+                Criteria.where("schoolGrade").is(schoolGrade)
+                        .and("deletedAt").is(null)
+        );
+        return mongoTemplate.find(query, User.class);
+    }
+
+    @Override
     public Optional<User> findByEmail(String email) {
         Query query = new Query(
                 Criteria.where("email").is(email)

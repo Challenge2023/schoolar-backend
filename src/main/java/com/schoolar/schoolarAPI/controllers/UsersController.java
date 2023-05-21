@@ -9,6 +9,7 @@ import com.schoolar.schoolarAPI.users.model.entities.User;
 import com.schoolar.schoolarAPI.users.useCases.DeleteUser.DeleteUser;
 import com.schoolar.schoolarAPI.users.useCases.FindUserByEmail.FindUserByEmail;
 import com.schoolar.schoolarAPI.users.useCases.FindUserByEnrollment.FindUserByEnrollment;
+import com.schoolar.schoolarAPI.users.useCases.FindUsersBySchoolGrade.FindUserBySchoolGrade;
 import com.schoolar.schoolarAPI.users.useCases.RegisterUser.RegisterUser;
 import com.schoolar.schoolarAPI.users.useCases.UpdateUser.UpdateUser;
 import com.schoolar.schoolarAPI.users.useCases.findAllUsers.FindAllUsers;
@@ -30,8 +31,9 @@ public class UsersController {
     private final FindUserByEmail findUserByEmail;
     private final UpdateUser updateUser;
     private final DeleteUser deleteUser;
+    private final FindUserBySchoolGrade findUserBySchoolGrade;
 
-    public UsersController(RegisterUser registerUser, FindAllUsers findAllUsers, FindUsersByType findUsersByType, FindUserByEnrollment findUserByEnrollment, FindUserByEmail findUserByEmail, UpdateUser updateUser, DeleteUser deleteUser) {
+    public UsersController(RegisterUser registerUser, FindAllUsers findAllUsers, FindUsersByType findUsersByType, FindUserByEnrollment findUserByEnrollment, FindUserByEmail findUserByEmail, UpdateUser updateUser, DeleteUser deleteUser, FindUserBySchoolGrade findUserBySchoolGrade) {
         this.registerUser = registerUser;
         this.findAllUsers = findAllUsers;
         this.findUsersByType = findUsersByType;
@@ -39,6 +41,7 @@ public class UsersController {
         this.findUserByEmail = findUserByEmail;
         this.updateUser = updateUser;
         this.deleteUser = deleteUser;
+        this.findUserBySchoolGrade = findUserBySchoolGrade;
     }
 
     @PostMapping("/register")
@@ -60,6 +63,13 @@ public class UsersController {
     @GetMapping("/{type}")
     public ResponseEntity<List<User>> findUserByType(@Valid @PathVariable FindByTypeDTO type) throws UserNotFoundException{
         List<User> users = findUsersByType.execute(type);
+        if (users.isEmpty()) throw new UserNotFoundException("Nenhum usuário encontrado");
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/{schoolGrade}")
+    public ResponseEntity<List<User>> findUsersBySchoolGrade (@PathVariable String schoolGrade) throws UserNotFoundException{
+        List<User> users = findUserBySchoolGrade.execute(schoolGrade);
         if (users.isEmpty()) throw new UserNotFoundException("Nenhum usuário encontrado");
         return ResponseEntity.ok(users);
     }

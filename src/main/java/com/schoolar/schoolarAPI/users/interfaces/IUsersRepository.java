@@ -13,7 +13,7 @@ public interface IUsersRepository {
     List<User> findAll();
     List<User> findByType(FindByTypeDTO type);
     Optional<User> findByEnrollment(String enrollment);
-
+    List<User> findUsersBySchoolGrade(String schoolGrade);
     Optional<User> findByEmail(String email);
     User update(String enrollment, UpdateUserDTO data);
     void delete(String enrollment);

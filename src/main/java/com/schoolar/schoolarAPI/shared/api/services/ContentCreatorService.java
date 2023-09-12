@@ -38,27 +38,27 @@ public class ContentCreatorService {
                "\n" +
                "[\n" +
                "\t{\n" +
-               "\t\tquestion: \"Pergunta 1\",\n" +
-               "\t\tanswers: [\n" +
+               "\t\t\"question\": \"Pergunta 1\",\n" +
+               "\t\t\"answers\": [\n" +
                "\t\t\t{\n" +
-               "\t\t\t\tanswer: \"Alternativa A\",\n" +
-               "\t\t\t\tcorrect: false\n" +
+               "\t\t\t\t\"answer\": \"Alternativa A\",\n" +
+               "\t\t\t\t\"correct\": false\n" +
                "\t\t\t},\n" +
                "\t\t\t{\n" +
-               "\t\t\t\tanswer: \"Alternativa B\",\n" +
-               "\t\t\t\tcorrect: false\n" +
+               "\t\t\t\t\"answer\": \"Alternativa B\",\n" +
+               "\t\t\t\t\"correct\": false\n" +
                "\t\t\t},\n" +
                "\t\t\t{\n" +
-               "\t\t\t\tanswer: \"Alternativa C\",\n" +
-               "\t\t\t\tcorrect: true\n" +
+               "\t\t\t\t\"answer\": \"Alternativa C\",\n" +
+               "\t\t\t\t\"correct\": true\n" +
                "\t\t\t},\n" +
                "\t\t\t{\n" +
-               "\t\t\t\tanswer: \"Alternativa D\",\n" +
-               "\t\t\t\tcorrect: false\n" +
+               "\t\t\t\t\"answer\": \"Alternativa D\",\n" +
+               "\t\t\t\t\"correct\": false\n" +
                "\t\t\t},\n" +
                "\t\t\t{\n" +
-               "\t\t\t\tanswer: \"Alternativa E\",\n" +
-               "\t\t\t\tcorrect: false\n" +
+               "\t\t\t\t\"answer\": \"Alternativa E\",\n" +
+               "\t\t\t\t\"correct\": false\n" +
                "\t\t\t}\n" +
                "\t\t]\n" +
                "\t}\n" +

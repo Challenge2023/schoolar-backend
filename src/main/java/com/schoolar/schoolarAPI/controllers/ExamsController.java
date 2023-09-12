@@ -43,7 +43,7 @@ public class ExamsController {
         return service.createExam(data);
     }
 
-    @GetMapping("/content/generate")
+    @PostMapping("/content/generate")
     public Mono<String> generateContent(@RequestBody GenerateContentDTO data) {
         return contentService.generateContent(data.questionsNumber(), data.theme(), data.subject());
     }

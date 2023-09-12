@@ -1,7 +1,7 @@
 package com.schoolar.schoolarAPI.utils;
 
 
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class PasswordEncryption {
     public static String hash(String password) {

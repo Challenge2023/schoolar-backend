@@ -5,6 +5,7 @@ Este repositório contém o código-fonte e a documentação relacionados ao bac
 ## Pré-requisitos
 - JDK 8 ou superior
 - Maven
+- Docker
 
 ## Instruções de Instalação e Execução
 1. Clone este repositório: [https://github.com/Challenge2023/schoolar-backend](https://github.com/Challenge2023/schoolar-backend)

@@ -7,8 +7,8 @@ Este repositório contém o código-fonte e a documentação relacionados ao bac
 - Maven
 
 ## Instruções de Instalação e Execução
-1. Clone este repositório: [https://github.com/Challenge2023/schoolar-mobile](https://github.com/Challenge2023/schoolar-backend)
-2. Navegue até o diretório clonado: cd schoolar-mobile
+1. Clone este repositório: [https://github.com/Challenge2023/schoolar-backend](https://github.com/Challenge2023/schoolar-backend)
+2. Navegue até o diretório clonado: cd schoolar-backend
 3. Execute o docker compose através do comando: sudo docker-compose up
 4. Executar o arquivo: SchoolarApiApplication
 

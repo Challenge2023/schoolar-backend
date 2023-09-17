@@ -1,0 +1,14 @@
+---
+version: "3"
+services:
+  meu-app:
+    image: MeuACR.azurecr.io/meu-app:v1
+    ports:
+      - 8080:8080
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=schoolar
+      - MONGO_INITDB_ROOT_PASSWORD=schoolar123

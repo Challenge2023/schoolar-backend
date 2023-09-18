@@ -142,11 +142,5 @@ az container create --resource-group schoolargroup --name schoolar-api --image s
 Para verificar o estado da implantação, você pode usar os seguintes comandos:
 
 ```bash
-az container show --resource-group schoolargroup --name schoolar-api --query "{FQDN:ipAddress.fqdn,ProvisioningState:provisioningState}" --out table
-```
-
-ou
-
-```bash
 az container show --resource-group schoolargroup --name schoolar-api --query "{FQDN:ipAddress.fqdn,IP:ipAddress.ip,ProvisioningState:provisioningState}" --out table
 ```

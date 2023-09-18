@@ -28,3 +28,125 @@ O backend da plataforma Schoolar oferece um conjunto abrangente de funcionalidad
 - **APIs para Integração**: O backend utiliza APIs RESTful para facilitar a integração e a comunicação entre os diferentes componentes e serviços do sistema, garantindo uma arquitetura flexível e adaptável às necessidades dos usuários.
 
 Estas funcionalidades combinadas formam a base sólida da Schoolar, possibilitando o alcance de seus objetivos e a entrega de uma experiência de aprendizado inovadora e personalizada.
+
+# Documentação de Implantação de Aplicação Spring Boot no Azure
+
+## Índice
+
+1. [Gerar build do projeto](#gerar-build-do-projeto)
+2. [Criar um Grupo de Recursos](#criar-um-grupo-de-recursos)
+3. [Criar um Registro de Contêiner do Azure (ACR)](#criar-um-registro-de-contêiner-do-azure-acr)
+4. [Autenticar o Docker com o ACR](#autenticar-o-docker-com-o-acr)
+5. [Construir a Imagem Docker Localmente](#construir-a-imagem-docker-localmente)
+6. [Marcar e Empurrar a Imagem para o ACR](#marcar-e-empurrar-a-imagem-para-o-acr)
+7. [Habilitar permissão de administrador](#habilitar-permissão-de-administrador)
+8. [Verificar Senha do ACR](#verificar-senha-do-acr)
+9. [Criar Contêiner da Aplicação Spring Boot](#criar-contêiner-da-aplicação-spring-boot)
+10. [Verificar Estado da Implantação](#verificar-estado-da-implantação)
+
+---
+
+### Gerar build do projeto
+
+Para gerar o build do projeto, execute o seguinte comando:
+
+```bash
+mvn clean install
+```
+
+---
+
+### Criar um Grupo de Recursos
+
+Para criar um novo grupo de recursos no Azure, use o comando:
+
+```bash
+az group create --name schoolargroup --location eastus
+```
+
+---
+
+### Criar um Registro de Contêiner do Azure (ACR)
+
+Execute o seguinte comando para criar um ACR:
+
+```bash
+az acr create --resource-group schoolargroup --name schoolaracr --sku Basic
+```
+
+---
+
+### Autenticar o Docker com o ACR
+
+Para autenticar o Docker com o ACR, execute o seguinte comando:
+
+```bash
+az acr login --name schoolaracr
+```
+
+---
+
+### Construir a Imagem Docker Localmente
+
+Execute o comando abaixo para construir a imagem Docker:
+
+```bash
+docker build -t schoolar-api .
+```
+
+---
+
+### Marcar e Empurrar a Imagem para o ACR
+
+Para marcar e empurrar a imagem para o ACR, use os seguintes comandos:
+
+```bash
+docker tag schoolar-api schoolaracr.azurecr.io/schoolar-api:v1
+docker push schoolaracr.azurecr.io/schoolar-api:v1
+```
+
+---
+
+### Habilitar permissão de administrador
+
+Para habilitar a permissão de administrador no ACR, use o comando:
+
+```bash
+az acr update -n schoolaracr --admin-enabled true
+```
+
+---
+
+### Verificar Senha do ACR
+
+Para verificar a senha do ACR, use o comando:
+
+```bash
+az acr credential show --name schoolaracr
+```
+
+---
+
+### Criar Contêiner da Aplicação Spring Boot
+
+Para criar o contêiner da aplicação Spring Boot, execute o seguinte comando:
+
+```bash
+az container create --resource-group schoolargroup --name schoolar-api --image schoolaracr.azurecr.io/schoolar-api:v1 --cpu 1 --memory 1 --ports 8080 --ip-address public
+```
+
+---
+
+### Verificar Estado da Implantação
+
+Para verificar o estado da implantação, você pode usar os seguintes comandos:
+
+```bash
+az container show --resource-group schoolargroup --name schoolar-api --query "{FQDN:ipAddress.fqdn,ProvisioningState:provisioningState}" --out table
+```
+
+ou
+
+```bash
+az container show --resource-group schoolargroup --name schoolar-api --query "{FQDN:ipAddress.fqdn,IP:ipAddress.ip,ProvisioningState:provisioningState}" --out table
+```

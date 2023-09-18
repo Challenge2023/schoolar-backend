@@ -1,12 +1,7 @@
   spring:
     data:
       mongodb:
-        authentication-database: admin
-        username: schoolar
-        password: schoolar123
-        database: schoolardb
-        port: 27017
-        host: localhost
+          uri: mongodb+srv://schoolar:schoolar123@cluster-schollar.ozrnsz3.mongodb.net/?retryWrites=true&w=majority
 
   application:
     security:

@@ -35,7 +35,7 @@ pipeline {
                 sh 'docker-compose logs > docker-compose-logs.txt'
             }
 
-            // Fazer o upload dos logs como artefatos do Jenkinss
+            // Fazer o upload dos logs como artefatos do Jenkins
             archiveArtifacts artifacts: 'docker-compose-logs.txt', onlyIfSuccessful: true
         }
 

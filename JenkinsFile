@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Obter o código fonte do repositório
+                checkout scm
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                // Construir a imagem Docker da aplicação
+                script {
+                    docker.build("schoolarapi:latest")
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Subir os serviços definidos no Docker Compose
+                script {
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Capturar logs pode ajudar com o debugging
+            script {
+                sh 'docker-compose logs > docker-compose-logs.txt'
+            }
+
+            // Fazer o upload dos logs como artefatos do Jenkins
+            archiveArtifacts artifacts: 'docker-compose-logs.txt', onlyIfSuccessful: true
+        }
+
+        cleanup {
+            // Desfazer as mudanças feitas pelo docker-compose
+            script {
+                sh 'docker-compose down -v'
+            }
+        }
+    }
+}

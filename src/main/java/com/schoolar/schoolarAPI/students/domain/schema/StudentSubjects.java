@@ -22,14 +22,11 @@ public class StudentSubjects {
 
     public StudentSubjects() {}
 
-    public StudentSubjects(String id, String code, Double averageGrade, Integer absences, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+    public StudentSubjects(String id, String code, Double averageGrade, Integer absences) {
         this.id = id;
         this.code = code;
         this.averageGrade = averageGrade;
         this.absences = absences;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
     }
 
     public String getId() {

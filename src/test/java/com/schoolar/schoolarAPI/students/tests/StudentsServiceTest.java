@@ -61,7 +61,7 @@ public class StudentsServiceTest {
     @DisplayName("Should be able to update student data")
     void updateStudent() {
         Student student = new Student();
-        student.setId("64fdd97b2e09ea0629753091");
+        student.setId("64fdd97b2e09ea062975309");
         student.setName("Lucas Amadeu");
 
         UpdateStudentDTO newStudent = new UpdateStudentDTO("Vitor Mantovani", null, null, null, null);

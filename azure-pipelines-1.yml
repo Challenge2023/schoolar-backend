@@ -10,6 +10,7 @@ variables:
   imageName: 'schoolar-api'
   imageTag: 'v1'
 
+stages:
 - stage: Deploy
   displayName: 'Deploy Container'
   jobs:

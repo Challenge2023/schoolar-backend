@@ -29,7 +29,10 @@ O backend da plataforma Schoolar oferece um conjunto abrangente de funcionalidad
 
 Estas funcionalidades combinadas formam a base sólida da Schoolar, possibilitando o alcance de seus objetivos e a entrega de uma experiência de aprendizado inovadora e personalizada.
 
-# Documentação de Implantação de Aplicação Spring Boot no Azure
+# Documentação de Implantação
+
+<details>
+<summary>Documentação de Implantação MANUAL</summary>
 
 ## Índice
 
@@ -144,3 +147,71 @@ Para verificar o estado da implantação, você pode usar os seguintes comandos:
 ```bash
 az container show --resource-group schoolargroup --name schoolar-api --query "{FQDN:ipAddress.fqdn,IP:ipAddress.ip,ProvisioningState:provisioningState}" --out table
 ```
+
+</details>
+
+<details>
+<summary>Documentação de Implantação AUTOMATIZADA - CI/CD</summary>
+
+## Índice
+1. [Introdução](#introdução)
+2. [Descrição Detalhada do Pipeline](#descrição-detalhada-do-pipeline)
+   1. [CI - Integração Contínua](#ci---integração-contínua)
+   2. [CD - Entrega Contínua](#cd---entrega-contínua)
+3. [Especificação Técnica](#especificação-técnica)
+4. [Configuração do Ambiente](#configuração-do-ambiente)
+5. [Segurança e Melhores Práticas](#segurança-e-melhores-práticas)
+6. [Conclusão](#conclusão)
+
+### Introdução
+Este documento oferece uma visão detalhada do pipeline de CI/CD implementado para a Schoolar API, usando Azure DevOps. O objetivo é fornecer um entendimento claro de cada etapa e processo envolvido, garantindo eficiência e confiabilidade nas implantações.
+
+### Descrição Detalhada do Pipeline
+
+#### CI - Integração Contínua
+1. **Trigger de Commit (Build Maven CI)**: 
+   - O pipeline é iniciado automaticamente a cada commit na branch principal (`main`). 
+   - **Nome da Build**: `Schoolar_API_CI_Build`.
+2. **Execução de Testes com Maven (Test Execution)**:
+   - `task: Maven@3`: A tarefa Maven é utilizada para compilar o código-fonte.
+   - `inputs`: 
+     - `mavenPomFile: 'pom.xml'`: Especifica o arquivo POM do Maven.
+     - `goals: 'clean package'`: Limpa o build anterior e cria um novo pacote, incluindo a execução de testes.
+   - **Resultado**: Gera um artefato (`schoolar-api.jar`) na pasta `target/`.
+
+#### CD - Entrega Contínua
+1. **Preparação para o Deploy (Pre-Deployment)**:
+   - `task: AzureContainerApps@1`: Configura o deploy do aplicativo no Azure Container Apps.
+   - `inputs`: 
+     - `azureSubscription`: Especifica a subscrição Azure utilizada.
+     - `acrName`, `acrUsername`, `acrPassword`: Detalhes do Azure Container Registry.
+     - `containerAppName: 'schoolar-api'`: Nome do aplicativo de container.
+     - `resourceGroup: 'schoolargroup'`: Grupo de recursos do Azure.
+   - **Nome da Build**: `Schoolar_API_CD_Deployment`.
+2. **Implantação no Azure Container Apps (Deployment Execution)**:
+   - Utiliza a imagem Docker, especificada na build anterior, para realizar o deploy.
+   - Configura o ambiente de produção, incluindo a definição da porta (`8080`) e localização geográfica (`eastus`).
+
+### Especificação Técnica
+- **Linguagem de Programação**: Java (Spring Boot).
+- **Sistema de Build**: Maven.
+- **Contêinerização**: Docker.
+- **Ambiente de Produção**: Azure Container Apps.
+
+### Configuração do Ambiente
+- **Azure DevOps**: Usado para gerenciar e automatizar o pipeline.
+- **Maven**: Gerencia dependências e processo de build.
+- **Docker**: Criação de contêineres para a aplicação.
+- **Azure Container Registry (ACR)**: Armazena imagens Docker.
+- **Azure Container Apps**: Hospeda e gerencia a aplicação em contêineres.
+
+### Segurança e Melhores Práticas
+- **Gestão de Credenciais**: Uso de variáveis de grupo e segredos para proteger credenciais.
+- **Monitoramento de Qualidade de Código**: Testes automatizados e revisões de código para manter altos padrões.
+
+### Conclusão
+Este pipeline de CI/CD detalhado para a Schoolar API assegura uma integração e entrega eficientes, com foco na qualidade, segurança e confiabilidade do aplicativo.
+
+
+
+</details>

@@ -1,29 +1,37 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
 - main
 
-resources:
-- repo: self
+pool:
+  vmImage: 'ubuntu-latest'
 
 variables:
-  tag: '$(Build.BuildId)'
+  # Definindo as variáveis necessárias
+  resourceGroup: 'schoolargroup'
+  acrName: 'schoolaracr'
+  imageName: 'schoolar-api'
+  imageTag: 'v1'
 
 stages:
 - stage: Build
-  displayName: Build image
+  displayName: 'Build and Push Docker Image'
   jobs:
   - job: Build
-    displayName: Build
-    pool:
-      vmImage: ubuntu-latest
+    displayName: 'Build'
     steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
+    - script: |
+        mvn clean install
+        docker build -t $(imageName) .
+        az acr login --name $(acrName)
+        docker tag $(imageName) $(acrName).azurecr.io/$(imageName):$(imageTag)
+        docker push $(acrName).azurecr.io/$(imageName):$(imageTag)
+      displayName: 'Build and push image to ACR'
+
+- stage: Deploy
+  displayName: 'Deploy Container'
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy'
+    steps:
+    - script: |
+        az container create --resource-group $(resourceGroup) --name $(imageName) --image $(acrName).azurecr.io/$(imageName):$(imageTag) --cpu 1 --memory 1 --ports 8080 --ip-address public
+      displayName: 'Create Azure Container Instance'

@@ -47,11 +47,14 @@ stages:
         goals: 'package'
       displayName: 'Maven build with JDK 17'
     - script: |
-        docker build -t $(imageName) .
+        echo $(azureDevOpsPAT) | az devops login
         az acr login --name $(acrName)
+        docker build -t $(imageName) .
         docker tag $(imageName) $(acrName).azurecr.io/$(imageName):$(imageTag)
         docker push $(acrName).azurecr.io/$(imageName):$(imageTag)
-      displayName: 'Build and push image to ACR'
+      displayName: 'Authenticate and push image to ACR'
+      env:
+        AZURE_DEVOPS_EXT_PAT: $(azureDevOpsPAT)
 
 - stage: Deploy
   displayName: 'Deploy Container'

@@ -1,0 +1,71 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  resourceGroup: 'schoolargroup'
+  acrName: 'schoolaracr'
+  imageName: 'schoolar-api'
+  imageTag: 'v1'
+
+stages:
+- stage: PreBuild
+  displayName: 'Pre-Build Validation'
+  jobs:
+  - job: Validate
+    displayName: 'Validate Access'
+    steps:
+    - bash: az --version
+      displayName: 'Show Azure CLI version'
+    - bash: az devops configure --defaults organization=$(System.TeamFoundationCollectionUri) project=$(System.TeamProject) --use-git-aliases true
+      displayName: 'Set default Azure DevOps organization and project'
+    - bash: |
+        az pipelines build list
+        git pr list
+      displayName: 'Show build list and PRs'
+      env:
+        AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
+
+- stage: Build
+  displayName: 'Build and Push Docker Image'
+  jobs:
+  - job: Build
+    displayName: 'Build'
+    steps:
+    - task: Maven@3
+      inputs:
+        mavenPomFile: 'pom.xml'
+        mavenOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.17'
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: false
+        testResultsFiles: '**/TEST-*.xml'
+        goals: 'package'
+      displayName: 'Maven build with JDK 17'
+
+- stage: Deploy
+  displayName: 'Deploy Container'
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy'
+    steps:
+    - task: AzureContainerApps@1
+      inputs:
+        appSourcePath: '.'
+        azureSubscription: 'Azure for Students(2)(5346ca21-c31a-4db1-86f5-012204b8c727)'
+        acrName: 'schoolaracr'
+        acrUsername: 'schoolaracr'
+        acrPassword: 'emprE4Z3i1gvMrfN7SVrjIPx2ypB7FWgNl8/WUNw1H+ACRCcnh3o'
+        dockerfilePath: 'Dockerfile'
+        imageToBuild: 'schoolaracr.azurecr.io/schoolar-api:v1'
+        imageToDeploy: 'schoolaracr.azurecr.io/schoolar-api:v1'
+        containerAppName: 'schoolar-api'
+        resourceGroup: 'schoolargroup'
+        containerAppEnvironment: 'schoolar-api' # Substitua pelo nome do seu ambiente
+        runtimeStack: '' # Deixe em branco para aplicativos em containers
+        targetPort: '8080'
+        location: 'eastus'
+        ingress: 'external'

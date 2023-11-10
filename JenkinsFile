@@ -1,48 +1,36 @@
 pipeline {
+    environment {
+        DOCKER_IMAGE = 'schoolarapi'
+        DOCKER_TAG = "latest"
+        DOCKER_COMPOSE_VERSION = '3.8'
+    }
     agent any
-
     stages {
         stage('Checkout') {
             steps {
-                // Obter o código fonte do repositório
-                checkout scm
+                git(url: 'https://github.com/Challenge2023/schoolar-backend.git', credentialsId: '934f832b-4563-403e-b4bb-43c350f21fb6')
             }
         }
-
         stage('Build Docker Image') {
             steps {
-                // Construir a imagem Docker da aplicação
                 script {
-                    docker.build("schoolarapi:latest")
+                    docker.build("$DOCKER_IMAGE:$DOCKER_TAG")
                 }
             }
         }
-
-        stage('Deploy') {
+        stage('Deploy with Docker Compose') {
             steps {
-                // Subir os serviços definidos no Docker Compose
                 script {
-                    sh 'docker-compose up -d'
+                    sh 'docker-compose -f docker-compose.yml up -d'
                 }
             }
         }
     }
-
     post {
         always {
-            // Capturar logs pode ajudar com o debugging
             script {
-                sh 'docker-compose logs > docker-compose-logs.txt'
-            }
-
-            // Fazer o upload dos logs como artefatos do Jenkins
-            archiveArtifacts artifacts: 'docker-compose-logs.txt', onlyIfSuccessful: true
-        }
-
-        cleanup {
-            // Desfazer as mudanças feitas pelo docker-compose
-            script {
-                sh 'docker-compose down -v'
+                sh 'docker-compose -f docker-compose.yml down'
+                sh 'docker system prune -af'
             }
         }
     }

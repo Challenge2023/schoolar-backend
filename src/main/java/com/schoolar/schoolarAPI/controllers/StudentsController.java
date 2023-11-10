@@ -20,6 +20,8 @@ public class StudentsController {
         this.studentsService = studentsService;
     }
 
+    @GetMapping("/david")
+    public String davidChato() { return "Hello David"; }
     @GetMapping("")
     public List<Student> getAllStudents() {
         return studentsService.getAllStudents();

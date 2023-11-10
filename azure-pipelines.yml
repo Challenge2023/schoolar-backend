@@ -18,9 +18,14 @@ stages:
   - job: Validate
     displayName: 'Validate Access'
     steps:
-    - pwsh: |
+    - bash: az --version
+      displayName: 'Show Azure CLI version'
+    - bash: az devops configure --defaults organization=$(System.TeamFoundationCollectionUri) project=$(System.TeamProject) --use-git-aliases true
+      displayName: 'Set default Azure DevOps organization and project'
+    - bash: |
         az pipelines build list
-      displayName: 'Show build list'
+        git pr list
+      displayName: 'Show build list and PRs'
       env:
         AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
 
@@ -30,8 +35,18 @@ stages:
   - job: Build
     displayName: 'Build'
     steps:
+    - task: Maven@3
+      inputs:
+        mavenPomFile: 'pom.xml'
+        mavenOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.17'
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: false
+        testResultsFiles: '**/TEST-*.xml'
+        goals: 'package'
+      displayName: 'Maven build with JDK 17'
     - script: |
-        mvn clean install
         docker build -t $(imageName) .
         az acr login --name $(acrName)
         docker tag $(imageName) $(acrName).azurecr.io/$(imageName):$(imageTag)

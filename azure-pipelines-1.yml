@@ -11,11 +11,11 @@ variables:
   imageTag: 'v1'
 
 stages:
-- stage: Deploy
-  displayName: 'Deploy Container'
+- stage: BuildAndTest
+  displayName: 'Build and Run Tests'
   jobs:
-  - job: Deploy
-    displayName: 'Deploy'
+  - job: BuildAndTest
+    displayName: 'Build and Test'
     steps:
     - task: Maven@3
       inputs:
@@ -24,10 +24,27 @@ stages:
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '1.17'
         jdkArchitectureOption: 'x64'
-        publishJUnitResults: false
+        publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
-        goals: 'package'
-      displayName: 'Maven build with JDK 17'
+        goals: 'clean package' # Isso irá construir e testar o projeto
+      displayName: 'Maven build and test with JDK 17'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)/target' # Publica os artefatos da pasta target
+        artifact: 'spring-boot-artifact'
+        publishLocation: 'pipeline'
+
+- stage: Deploy
+  displayName: 'Deploy Container'
+  condition: succeeded('BuildAndTest')
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy'
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifactName: 'spring-boot-artifact'
+        targetPath: '$(System.DefaultWorkingDirectory)/target' # Baixa os artefatos para a pasta target
     - task: AzureContainerApps@1
       inputs:
         appSourcePath: '.'
@@ -40,8 +57,8 @@ stages:
         imageToDeploy: 'schoolaracr.azurecr.io/schoolar-api:v1'
         containerAppName: 'schoolar-api'
         resourceGroup: 'schoolargroup'
-        containerAppEnvironment: 'schoolar-api' # Substitua pelo nome do seu ambiente
-        runtimeStack: '' # Deixe em branco para aplicativos em containers
+        containerAppEnvironment: 'schoolar-api'
+        runtimeStack: ''
         targetPort: '8080'
         location: 'eastus'
         ingress: 'external'

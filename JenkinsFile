@@ -2,34 +2,32 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'schoolarapi'
         DOCKER_TAG = "latest"
-        DOCKER_COMPOSE_VERSION = '3.8'
     }
     agent any
     stages {
-        stage('Checkout') {
-            steps {
-                git(url: 'https://github.com/Challenge2023/schoolar-backend.git', credentialsId: '934f832b-4563-403e-b4bb-43c350f21fb6	')
-            }
-        }
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("$DOCKER_IMAGE:$DOCKER_TAG")
+                    // Constrói a imagem Docker da aplicação usando o Dockerfile
+                    // O '.' no final indica o contexto de build, que é o diretório atual (onde o Jenkins fez checkout do código)
+                    docker.build("$DOCKER_IMAGE:$DOCKER_TAG .")
                 }
             }
         }
         stage('Deploy with Docker Compose') {
             steps {
                 script {
-                    sh 'docker-compose -f docker-compose.yml up -d'
+                    // Substitua './docker-compose.yml' pelo caminho correto do seu arquivo docker-compose.yml se não estiver na raiz do repositório
+                    sh 'docker-compose -f ./docker-compose.yml up -d'
                 }
             }
         }
     }
     post {
         always {
+            // Ação para limpeza, como remover imagens Docker não utilizadas ou parar serviços
             script {
-                sh 'docker-compose -f docker-compose.yml down'
+                sh 'docker-compose -f ./docker-compose.yml down'
                 sh 'docker system prune -af'
             }
         }

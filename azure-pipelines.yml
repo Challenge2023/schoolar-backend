@@ -12,6 +12,18 @@ variables:
   imageTag: 'v1'
 
 stages:
+- stage: PreBuild
+  displayName: 'Pre-Build Validation'
+  jobs:
+  - job: Validate
+    displayName: 'Validate Access'
+    steps:
+    - pwsh: |
+        az pipelines build list
+      displayName: 'Show build list'
+      env:
+        AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
+
 - stage: Build
   displayName: 'Build and Push Docker Image'
   jobs:

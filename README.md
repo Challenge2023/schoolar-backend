@@ -29,6 +29,30 @@ O backend da plataforma Schoolar oferece um conjunto abrangente de funcionalidad
 
 Estas funcionalidades combinadas formam a base sólida da Schoolar, possibilitando o alcance de seus objetivos e a entrega de uma experiência de aprendizado inovadora e personalizada.
 
+# Documentação de Endpoints
+
+#### Baixar o Insomnia
+
+1. Acesse o site oficial do Insomnia: [https://insomnia.rest/download](https://insomnia.rest/download).
+2. Escolha a versão do Insomnia para o seu sistema operacional (Windows, MacOS, Linux).
+3. Faça o download e instale o programa.
+
+#### Importar um Arquivo JSON no Insomnia
+
+1. Abra o Insomnia.
+2. No canto superior esquerdo, clique em "Application" e depois em "Preferences".
+3. Na janela de preferências, selecione a aba "Data" e clique em "Import Data".
+4. Escolha "From File" e navegue até o arquivo JSON que você deseja importar.
+5. Selecione o arquivo `endpoints.json` e clique em "Import".
+6. O conteúdo do JSON será importado para o Insomnia.
+
+#### Link para Download do Arquivo JSON
+
+Para baixar o arquivo `endpoints.json`, use o seguinte link:
+
+[Download endpoints.json](/assets/endpoints.json)
+
+
 # Documentação de Implantação
 
 <details>

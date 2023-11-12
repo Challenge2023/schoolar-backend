@@ -13,6 +13,9 @@ Este repositório contém o código-fonte e a documentação relacionados ao bac
 3. Execute o docker compose através do comando: sudo docker-compose up
 4. Executar o arquivo: SchoolarApiApplication
 
+## Sobre
+
+A educação, essencial para o desenvolvimento humano e social, enfrenta desafios como a falta de feedback personalizado para alunos e a dificuldade em identificar seus pontos fortes e fracos, o que leva a uma aprendizagem ineficiente. Além disso, os professores sofrem com a sobrecarga de trabalho ao preparar aulas e corrigir provas, limitando o tempo para interações importantes com os alunos. Para resolver esses problemas, sugere-se a criação de uma plataforma de gerenciamento escolar que utiliza análise de dados e inteligência artificial. Esta plataforma visa oferecer soluções personalizadas para os alunos, facilitar o trabalho dos professores e melhorar o processo educacional.
 
 ## Funcionalidades do Backend
 O backend da plataforma Schoolar oferece um conjunto abrangente de funcionalidades para suportar as necessidades dos alunos e professores:

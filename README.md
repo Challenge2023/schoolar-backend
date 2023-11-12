@@ -211,7 +211,7 @@ Este documento oferece uma visão detalhada do pipeline de CI/CD implementado pa
 
 ## Diagrama
 
-[![](https://i.postimg.cc/zvPNc0pS/Whats-App-Image-2023-11-12-at-09-50-42-1.jpg)
+[!](https://i.postimg.cc/zvPNc0pS/Whats-App-Image-2023-11-12-at-09-50-42-1.jpg)
 
 ### Conclusão
 Este pipeline de CI/CD detalhado para a Schoolar API assegura uma integração e entrega eficientes, com foco na qualidade, segurança e confiabilidade do aplicativo.
